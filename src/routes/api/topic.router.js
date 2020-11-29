@@ -5,16 +5,25 @@ import Validators from '../../validators';
 
 const router = Router();
 
-const { createSubscriptionValidator } = Validators;
+const {
+  createSubscriptionValidator,
+  publishEventValidator,
+} = Validators;
 
 const {
-  SUBSCRIPTION: { CREATE }
+  SUBSCRIPTION: { SUBSCRIBE, PUBLISH_EVENT }
 } = ROUTES;
 
 router.post(
-  CREATE,
+  SUBSCRIBE,
   createSubscriptionValidator,
   TopicController.subscribe
+);
+
+router.post(
+  PUBLISH_EVENT,
+  publishEventValidator,
+  TopicController.publish
 );
 
 export default router;

@@ -26,7 +26,9 @@ export const MONGODB = {
 
 export const AMQP = {
   CONNECTION_URI: process.env.AMQP_CONNECTION_URI,
-  SUBSCRIBERS: {},
+  SUBSCRIBERS: {
+    PUBLISH_NEW_EVENT: 'publish_new_event',
+  },
 };
 
 export const MESSAGES = {
@@ -36,14 +38,21 @@ export const MESSAGES = {
   SERVER_ERROR: 'An error has occurred. Please try again later.',
   SERVER_IS_RUNNING: 'Server is running on %ADDRESS%.',
   CONNECTION_SUCCESSFUL: 'Connection to %SERVICE% successful.',
-  SUBSCRIPTION_SUCCESSFUL: 'Subscription to "%TOPIC%" successful.',
+  SUBSCRIPTION_SUCCESSFUL: 'Subscription to %TOPIC% successful.',
+  PUBLISH_EVENT_FAILED: 'Failed to publish event to %TOPIC%.',
+  PUBLISH_EVENT_SUCCESSFUL: 'Event has been published to %TOPIC% successfully.',
+  LISTENING_FOR_MESSAGES: 'Listening for messages in %QUEUE%',
+  MESSAGE_RECEIVED: 'Received %MESSAGE%',
+  AMQP_CONNECTION_FAILED: 'Could not connect to message broker.',
+  DISPATCHED_TO_BROKER: 'Request sent to worker thread: %DATA%',
 };
 
 export const ROUTES = {
   HOME: '/',
   API_DOCS: '/docs',
   SUBSCRIPTION: {
-    CREATE: '/subscribe/:topic'
+    SUBSCRIBE: '/subscribe/:topic',
+    PUBLISH_EVENT: '/publish/:topic',
   }
 };
 

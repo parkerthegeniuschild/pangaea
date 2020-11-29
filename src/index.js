@@ -14,10 +14,12 @@ import v1Router from './routes';
 import { NODE, MESSAGES, STATUS_CODES } from './constants';
 import Response from './helpers/response.helper';
 import configs from './configs';
+import subscribers from './subscribers';
 
 const app = express();
 
 const { PORT, ENV } = NODE;
+const { publishNewEvent } = subscribers;
 
 const {
   REQUEST_OVERLOAD, ROUTE_NOT_FOUND, SERVER_ERROR, SERVER_IS_RUNNING
@@ -69,6 +71,9 @@ app.use((err, req, res, next) => {
 });
 
 process.send = process.send || (() => {});
+
+// kick-start the subscribers
+publishNewEvent();
 
 const server = http.createServer(app);
 
