@@ -6,15 +6,13 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import http from 'http';
 import Logger from './logger/winston';
+import v1Router from './routes';
 import { NODE, MESSAGES, STATUS_CODES } from './constants';
 import Response from './helpers/response.helper';
 
 const app = express();
 
-const {
-  PORT,
-  ENV,
-} = NODE;
+const { PORT, ENV } = NODE;
 
 const { ROUTE_NOT_FOUND, SERVER_ERROR, SERVER_IS_RUNNING } = MESSAGES;
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = STATUS_CODES;
@@ -26,6 +24,7 @@ ENV === 'production' && app.use(enforce.HTTPS({
   trustXForwardedHostHeader: true,
 }));
 
+app.use('/api/v1', v1Router);
 app.use(cors);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
