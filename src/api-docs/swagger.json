@@ -1,0 +1,38 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "0.0.1",
+    "title": "pangaea"
+  },
+  "schemes": ["http", "https"],
+  "basePath": "/api/v1",
+  "consumes": ["application/json"],
+  "paths": {
+    "/": {
+      "get": {
+        "description": "GET Landing Page",
+        "summary": "This confirms the api is online and running as expected",
+        "tags": ["Home"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "success"
+          }
+        }
+      }
+    },
+    "/docs": {
+      "get": {
+        "description": "GET API Docs Page",
+        "summary": "This shows the API documentation page",
+        "tags": ["API"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
+}
