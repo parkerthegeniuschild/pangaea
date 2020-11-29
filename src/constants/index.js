@@ -35,7 +35,8 @@ export const MESSAGES = {
   ROUTE_NOT_FOUND: 'Route not found.',
   SERVER_ERROR: 'An error has occurred. Please try again later.',
   SERVER_IS_RUNNING: 'Server is running on %ADDRESS%.',
-  CONNECTION_SUCCESSFUL: 'Connection to %SERVICE% successful.'
+  CONNECTION_SUCCESSFUL: 'Connection to %SERVICE% successful.',
+  SUBSCRIPTION_SUCCESSFUL: 'Subscription to "%TOPIC%" successful.',
 };
 
 export const ROUTES = {
