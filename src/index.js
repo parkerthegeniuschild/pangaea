@@ -4,18 +4,37 @@ import 'regenerator-runtime/runtime';
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
+import enforce from 'express-sslify';
+import RateLimit from 'express-rate-limit';
+import RedisStore from 'rate-limit-redis';
 import http from 'http';
+import helmet from 'helmet';
 import Logger from './logger/winston';
 import v1Router from './routes';
 import { NODE, MESSAGES, STATUS_CODES } from './constants';
 import Response from './helpers/response.helper';
+import configs from './configs';
 
 const app = express();
 
 const { PORT, ENV } = NODE;
 
-const { ROUTE_NOT_FOUND, SERVER_ERROR, SERVER_IS_RUNNING } = MESSAGES;
+const {
+  REQUEST_OVERLOAD, ROUTE_NOT_FOUND, SERVER_ERROR, SERVER_IS_RUNNING
+} = MESSAGES;
+
 const { NOT_FOUND, INTERNAL_SERVER_ERROR } = STATUS_CODES;
+const { redis } = configs;
+
+const apiLimiter = new RateLimit({
+  store: new RedisStore({
+    client: redis,
+  }),
+  windowMs: 5 * 60 * 1000, // 5 minutes
+  delayMs: 0,
+  max: 500,
+  message: REQUEST_OVERLOAD,
+});
 
 // enforce SSL connections in production
 ENV === 'production' && app.use(enforce.HTTPS({
@@ -23,11 +42,12 @@ ENV === 'production' && app.use(enforce.HTTPS({
   trustAzureHeader: true,
   trustXForwardedHostHeader: true,
 }));
-
-app.use('/api/v1', v1Router);
-app.use(cors);
+ENV === 'development' && app.use(cors());
+app.use(helmet());
+app.use(apiLimiter);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/api/v1', v1Router);
 
 // Error handling
 app.use((req, res, next) => {
@@ -45,7 +65,6 @@ app.use((err, req, res, next) => {
   );
 
   Response.send(res, err.status || INTERNAL_SERVER_ERROR, undefined, { message: err.message || SERVER_ERROR }, 'error');
-
   next();
 });
 
