@@ -9,3 +9,9 @@ sites/site*/public/theme/
 textpattern/
 HISTORY.txt
 README.txt
+
+
+.env
+.idea/
+.DS_Store
+node_modules/
