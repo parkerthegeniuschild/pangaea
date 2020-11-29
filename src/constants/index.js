@@ -3,7 +3,9 @@ import { StatusCodes } from 'http-status-codes';
 
 config();
 
-const { OK, INTERNAL_SERVER_ERROR, NOT_FOUND } = StatusCodes;
+const {
+  OK, CREATED, INTERNAL_SERVER_ERROR, BAD_REQUEST, UNPROCESSABLE_ENTITY, NOT_FOUND
+} = StatusCodes;
 
 export const NODE = {
   ENV: process.env.NODE_ENV,
@@ -29,18 +31,26 @@ export const AMQP = {
 
 export const MESSAGES = {
   WELCOME: 'Welcome to Pangaea!',
+  REQUEST_OVERLOAD: 'Too many requests. Please try again after some time.',
   ROUTE_NOT_FOUND: 'Route not found.',
   SERVER_ERROR: 'An error has occurred. Please try again later.',
   SERVER_IS_RUNNING: 'Server is running on %ADDRESS%.',
+  CONNECTION_SUCCESSFUL: 'Connection to %SERVICE% successful.'
 };
 
 export const ROUTES = {
   HOME: '/',
   API_DOCS: '/docs',
+  SUBSCRIPTION: {
+    CREATE: '/subscribe/:topic'
+  }
 };
 
 export const STATUS_CODES = {
   OK,
+  CREATED,
   INTERNAL_SERVER_ERROR,
+  BAD_REQUEST,
+  UNPROCESSABLE_ENTITY,
   NOT_FOUND,
 };
