@@ -1,9 +1,9 @@
 import indexRouter from './api/index.router';
-import subscriptionRouter from './api/subscription.router';
+import topicRouter from './api/topic.router';
 
 const routes = [
   indexRouter,
-  subscriptionRouter,
+  topicRouter,
 ];
 
 export default routes;

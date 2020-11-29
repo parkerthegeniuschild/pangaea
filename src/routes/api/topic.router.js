@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import SubscriptionController from '../../controllers/subscription.controller';
+import TopicController from '../../controllers/topic.controller';
 import { ROUTES } from '../../constants';
 import Validators from '../../validators';
 
@@ -14,7 +14,7 @@ const {
 router.post(
   CREATE,
   createSubscriptionValidator,
-  SubscriptionController.create
+  TopicController.subscribe
 );
 
 export default router;
