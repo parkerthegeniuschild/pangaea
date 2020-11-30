@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import amqp from 'amqplib';
+// import axios from 'axios';
 import Logger from '../logger/winston';
 import { MESSAGES, AMQP } from '../constants';
 
@@ -77,6 +78,23 @@ export const sendToWorkerThread = async (info, ms) => {
 
     Logger.info(DISPATCHED_TO_BROKER.replace('%DATA%', JSON.stringify(data)));
     return channel.sendToQueue(queue, new Buffer.from(JSON.stringify(data)), { persistent: true });
+  } catch (e) {
+    Logger.error(e.stack);
+    return false;
+  }
+};
+
+/**
+ * Broadcasts a message to a list of subscribers
+ * @param {Array<Object>} subscribers
+ * @param {Object} message
+ * @return {Boolean}
+ */
+export const publicBroadcast = (subscribers, message) => {
+  try {
+    subscribers.forEach((subscriber) => {
+      // TODO: Send the message, but first let's create the eventListener
+    });
   } catch (e) {
     Logger.error(e.stack);
     return false;

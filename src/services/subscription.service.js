@@ -19,4 +19,18 @@ export default class SubscriptionService {
       return false;
     }
   }
+
+  /**
+   * Finds all subscribers to a topic
+   * @param {Object} filter
+   * @return {Promise<Boolean|Object>}
+   */
+  static async findAll(filter) {
+    try {
+      return await Subscription.find(filter).sort({ _id: -1 }).lean();
+    } catch (e) {
+      Logger.error(e.stack);
+      return false;
+    }
+  }
 }
