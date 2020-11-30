@@ -40,11 +40,12 @@ export const MESSAGES = {
   CONNECTION_SUCCESSFUL: 'Connection to %SERVICE% successful.',
   SUBSCRIPTION_SUCCESSFUL: 'Subscription to %TOPIC% successful.',
   PUBLISH_EVENT_FAILED: 'Failed to publish event to %TOPIC%.',
-  PUBLISH_EVENT_SUCCESSFUL: 'Event has been published to %TOPIC% successfully.',
+  BROADCAST_EVENT_SUCCESSFUL: 'Event has been broadcast to %TOPIC% subscribers successfully.',
   LISTENING_FOR_MESSAGES: 'Listening for messages in %QUEUE%',
   MESSAGE_RECEIVED: 'Received %MESSAGE%',
   AMQP_CONNECTION_FAILED: 'Could not connect to message broker.',
   DISPATCHED_TO_BROKER: 'Request sent to worker thread: %DATA%',
+  NO_ACTIVE_SUBSCRIBERS_FOUND: 'No active subscribers found for %TOPIC%',
 };
 
 export const ROUTES = {
