@@ -45,6 +45,7 @@ export const MESSAGES = {
   LISTENING_FOR_MESSAGES: 'Listening for messages in %QUEUE%',
   AMQP_CONNECTION_FAILED: 'Could not connect to message broker.',
   NO_ACTIVE_SUBSCRIBERS_FOUND: 'No active subscribers found for %TOPIC%',
+  BROADCAST_FAILED_FOR_SUBSCRIBER: 'Broadcast failed for subscriber at %URL%',
 };
 
 export const ROUTES = {
