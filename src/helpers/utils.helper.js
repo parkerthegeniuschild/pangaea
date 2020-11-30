@@ -1,14 +1,11 @@
 import { isEmpty } from 'lodash';
 import amqp from 'amqplib';
-// import axios from 'axios';
+import axios from 'axios';
 import Logger from '../logger/winston';
 import { MESSAGES, AMQP } from '../constants';
 
 const { CONNECTION_URI } = AMQP;
-const {
-  AMQP_CONNECTION_FAILED,
-  DISPATCHED_TO_BROKER,
-} = MESSAGES;
+const { AMQP_CONNECTION_FAILED } = MESSAGES;
 
 /**
  * Trim form inputs
@@ -76,7 +73,6 @@ export const sendToWorkerThread = async (info, ms) => {
     const channel = await connection.createChannel();
     await channel.assertQueue(queue);
 
-    Logger.info(DISPATCHED_TO_BROKER.replace('%DATA%', JSON.stringify(data)));
     return channel.sendToQueue(queue, new Buffer.from(JSON.stringify(data)), { persistent: true });
   } catch (e) {
     Logger.error(e.stack);
@@ -87,14 +83,20 @@ export const sendToWorkerThread = async (info, ms) => {
 /**
  * Broadcasts a message to a list of subscribers
  * @param {Array<Object>} subscribers
+ * @param {String} topic
  * @param {Object} message
  * @return {Boolean}
  */
-export const publicBroadcast = (subscribers, message) => {
+export const publicBroadcast = async (subscribers, topic, message) => {
   try {
-    subscribers.forEach((subscriber) => {
-      // TODO: Send the message, but first let's create the eventListener
-    });
+    for (const subscriber of subscribers) {
+      await axios.post(subscriber.url, {
+        topic,
+        message,
+      });
+    }
+
+    return true;
   } catch (e) {
     Logger.error(e.stack);
     return false;
