@@ -5,7 +5,7 @@ import Logger from '../logger/winston';
 import { MESSAGES, AMQP } from '../constants';
 
 const { CONNECTION_URI } = AMQP;
-const { AMQP_CONNECTION_FAILED } = MESSAGES;
+const { AMQP_CONNECTION_FAILED, BROADCAST_FAILED_FOR_SUBSCRIBER } = MESSAGES;
 
 /**
  * Trim form inputs
@@ -90,10 +90,16 @@ export const sendToWorkerThread = async (info, ms) => {
 export const publicBroadcast = async (subscribers, topic, message) => {
   try {
     for (const subscriber of subscribers) {
-      await axios.post(subscriber.url, {
+      const { data } = await axios.post(subscriber.url, {
         topic,
         message,
       });
+
+      const { status, code } = data;
+
+      if (status !== 'success' || code !== 200) {
+        Logger.error(BROADCAST_FAILED_FOR_SUBSCRIBER.replace('%URL%', subscriber.url));
+      }
     }
 
     return true;

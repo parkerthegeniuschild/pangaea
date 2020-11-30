@@ -15,3 +15,5 @@ README.txt
 .idea/
 .DS_Store
 node_modules/
+
+dist/
