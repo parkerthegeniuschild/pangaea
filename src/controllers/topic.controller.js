@@ -5,11 +5,16 @@ import Response from '../helpers/response.helper';
 import { sendToWorkerThread } from '../helpers/utils.helper';
 
 const {
-  OK, CREATED, INTERNAL_SERVER_ERROR, UNPROCESSABLE_ENTITY
+  OK,
+  CREATED,
+  INTERNAL_SERVER_ERROR,
+  UNPROCESSABLE_ENTITY,
 } = STATUS_CODES;
 
 const {
-  SERVER_ERROR, SUBSCRIPTION_SUCCESSFUL, PUBLISH_EVENT_FAILED, PUBLISH_EVENT_SUCCESSFUL
+  SERVER_ERROR, SUBSCRIPTION_SUCCESSFUL,
+  PUBLISH_EVENT_FAILED,
+  PUBLISH_EVENT_SUCCESSFUL,
 } = MESSAGES;
 
 const { SubscriptionService } = Services;
@@ -54,7 +59,7 @@ export default class TopicController {
    */
   static async publish(req, res) {
     const {
-      body,
+      body: { message },
       params: { topic }
     } = req;
 
@@ -64,13 +69,36 @@ export default class TopicController {
         queue: PUBLISH_NEW_EVENT,
         data: {
           topic,
-          body,
+          message,
         }
       }, 100);
 
       return !result
         ? Response.send(res, UNPROCESSABLE_ENTITY, undefined, { message: PUBLISH_EVENT_FAILED.replace('%TOPIC%', topic) }, 'error')
-        : Response.send(res, OK, undefined, { message: PUBLISH_EVENT_SUCCESSFUL.replace('%TOPIC%', topic) });
+        : Response.send(res, CREATED, { topic, message }, { message: PUBLISH_EVENT_SUCCESSFUL.replace('%TOPIC%', topic) });
+    } catch (e) {
+      Logger.error(e.stack);
+      return Response.send(res, INTERNAL_SERVER_ERROR, undefined, { message: SERVER_ERROR }, 'error');
+    }
+  }
+
+  /**
+   * Listens to messages published to a subscribed topic
+   * @param {Object} req
+   * @param {Object} res
+   * @return {Promise<void>}
+   */
+  static async listen(req, res) {
+    const {
+      topic,
+      message,
+    } = req.body;
+
+    try {
+      Logger.info({ topic, message });
+
+      // A simple 200 acknowledgement
+      return Response.send(res, OK, undefined);
     } catch (e) {
       Logger.error(e.stack);
       return Response.send(res, INTERNAL_SERVER_ERROR, undefined, { message: SERVER_ERROR }, 'error');

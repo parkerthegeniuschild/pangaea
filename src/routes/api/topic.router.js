@@ -11,7 +11,11 @@ const {
 } = Validators;
 
 const {
-  SUBSCRIPTION: { SUBSCRIBE, PUBLISH_EVENT }
+  SUBSCRIPTION: {
+    SUBSCRIBE,
+    PUBLISH_EVENT,
+    LISTEN_EVENT
+  },
 } = ROUTES;
 
 router.post(
@@ -24,6 +28,11 @@ router.post(
   PUBLISH_EVENT,
   publishEventValidator,
   TopicController.publish
+);
+
+router.post(
+  LISTEN_EVENT,
+  TopicController.listen
 );
 
 export default router;
